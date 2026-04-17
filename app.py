@@ -14,14 +14,25 @@ Y_BY_GEN = {-5: 5.2, -4: 4.4, -3: 3.6, -2: 2.75, -1: 1.9, 0: 0.95, 1: -0.2, 2: -
 UNIT = 1.0
 
 def pick_japanese_font():
+    from pathlib import Path
+
+    # ←ここが今回の本命
+    bundled = Path("fonts/EnokoroSans-vert-Normal.otf")
+    if bundled.exists():
+        return str(bundled)
+
+    # 念のための保険
     candidates = [
-        "Noto Sans CJK JP", "Noto Serif CJK JP", "IPAexGothic", "IPAGothic",
-        "TakaoGothic", "Yu Gothic", "Hiragino Sans", "MS Gothic"
+        "Noto Sans CJK JP",
+        "IPAexGothic",
+        "Yu Gothic",
+        "MS Gothic",
     ]
     installed = {f.name: f.fname for f in fm.fontManager.ttflist}
     for name in candidates:
         if name in installed:
             return installed[name]
+
     return fm.findfont("DejaVu Sans")
 
 FONT_PROP = fm.FontProperties(fname=pick_japanese_font())
